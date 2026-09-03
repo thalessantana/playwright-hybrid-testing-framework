@@ -60,6 +60,9 @@ const payload = {
   ],
 };
 
+/**
+ * Sends the test execution notification to the configured Slack webhook.
+ */
 async function sendNotification() {
   try {
     const response = await fetch(WEBHOOK_URL, {
