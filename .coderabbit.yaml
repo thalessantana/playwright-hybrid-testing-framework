@@ -1,0 +1,41 @@
+language: "en-US"
+tone_instructions: "Act as a Senior SDET (Software Development Engineer in Test). Provide concise, constructive, and actionable feedback focusing on Playwright best practices, code maintainability, and clean architecture."
+
+reviews:
+  high_level_summary: true
+  poem: false
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "wip"
+      - "draft"
+  path_instructions:
+    - path: "pages/**/*.ts"
+      instructions: |
+        - Enforce strict Page Object Model (POM) separation of concerns.
+        - NEVER allow assertions (`expect`) inside Page Objects. Page Objects should only encapsulate locators and user action methods.
+        - Ensure methods return either `this` (for fluent chaining) or the resulting Page Object when navigation occurs.
+        - Ensure all page locators rely on Playwright's accessible user-facing locators (`getByRole`, `getByLabel`, `getByPlaceholder`, `getByText`) rather than brittle CSS or XPath selectors.
+
+    - path: "tests/**/*.spec.ts"
+      instructions: |
+        - Strictly forbid arbitrary sleeps like `page.waitForTimeout()`. Enforce web-first assertions and Playwright's built-in auto-waiting mechanisms instead.
+        - Validate that tests are atomic, independent, and do not rely on side effects from other tests.
+        - Ensure all assertions use Playwright's web-first `await expect(locator)...` pattern rather than evaluating element states manually.
+        - Flag any hardcoded test data, base URLs, or credentials; these must come from fixtures or environment variables.
+
+    - path: "api/**/*.ts"
+      instructions: |
+        - Ensure API clients/helpers encapsulate HTTP requests cleanly using Playwright's `APIRequestContext`.
+        - Ensure request payloads and responses use explicit TypeScript interfaces or types.
+        - Verify that authentication headers follow the Conduit API standard (`Authorization: Token <jwt>`).
+
+    - path: "playwright.config.ts"
+      instructions: |
+        - Ensure no sensitive data, secret tokens, or hardcoded URLs are present; all configuration should pull from `process.env` with sensible fallbacks.
+        - Ensure `testMatch` filters use cross-platform glob patterns (strings) instead of OS-specific regular expressions.
+
+    - path: "scripts/**/*.js"
+      instructions: |
+        - Ensure compatibility with Node.js ES Modules.
+        - Ensure sensitive webhook URLs or tokens are read strictly from environment variables without being logged to stdout.

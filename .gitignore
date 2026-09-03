@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Authentication & Local Storage
+.auth/
+
+# Playwright Test Artifacts
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Allure Test Artifacts
+allure-results/
+allure-report/
+
+# OS & IDE Temporary Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
