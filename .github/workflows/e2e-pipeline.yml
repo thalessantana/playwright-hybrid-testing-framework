@@ -44,7 +44,6 @@ jobs:
 
       - name: Run Playwright tests
         id: playwright-test
-        continue-on-error: true
         env:
           UI_BASE_URL: ${{ vars.UI_BASE_URL }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
@@ -70,4 +69,4 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           ALLURE_REPORT_URL: ${{ steps.deployment.outputs.page_url }}
-        run: node scripts/slack-notifier.js
+        run: node scripts/slack-notifier.mjs

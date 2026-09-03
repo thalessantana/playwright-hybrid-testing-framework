@@ -3,13 +3,11 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "baseUrl": ".",
     "paths": {
-      "@pages/*": ["pages/*"],
-      "@api/*": ["api/*"],
-      "@fixtures/*": ["fixtures/*"]
+      "@pages/*": ["./pages/*"],
+      "@api/*": ["./api/*"],
+      "@fixtures/*": ["./fixtures/*"]
     },
-    "ignoreDeprecations": "6.0",
     "strict": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true,

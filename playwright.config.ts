@@ -21,11 +21,11 @@ export default defineConfig({
         outputFolder: 'allure-results',
         detail: true,
         suiteTitle: true,
-      }
+      },
     ],
   ],
   use: {
-    baseURL: process.env.UI_BASE_URL || 'http://localhost:4173',
+    baseURL: process.env.UI_BASE_URL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -35,11 +35,12 @@ export default defineConfig({
   projects: [
     {
       name: 'setup',
-      testMatch: /.*\.setup\.ts/,
+      testMatch: '**/*.setup.ts',
     },
     {
       name: 'e2e-chromium',
-      testMatch: /tests\/e2e\/.*\.spec\.ts/,
+      testMatch: '**/tests/e2e/**/*.spec.ts',
+      testIgnore: '**/tests/e2e/auth/**/*.spec.ts',
       dependencies: ['setup'],
       use: {
         ...devices['Desktop Chrome'],
@@ -48,21 +49,25 @@ export default defineConfig({
     },
     {
       name: 'e2e-unauthenticated',
-      testMatch: /tests\/e2e\/auth\/.*\.spec\.ts/,
+      testMatch: '**/tests/e2e/auth/**/*.spec.ts',
       use: {
         ...devices['Desktop Chrome'],
       },
     },
     {
       name: 'api',
-      testMatch: /tests\/api\/.*\.spec\.ts/,
+      testMatch: '**/tests/api/**/*.spec.ts',
       use: {
-        baseURL: process.env.API_BASE_URL || 'http://localhost:3000/api',
+        baseURL: process.env.API_BASE_URL
+          ? (process.env.API_BASE_URL.endsWith('/')
+              ? process.env.API_BASE_URL
+              : `${process.env.API_BASE_URL}/`)
+          : undefined,
         extraHTTPHeaders: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
       },
     },
-  ]
+  ],
 });

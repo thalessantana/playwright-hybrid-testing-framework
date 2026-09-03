@@ -72,9 +72,11 @@ async function sendNotification() {
       console.log('✅ Slack notification sent successfully!');
     } else {
       console.error('❌ Failed to send Slack notification:', await response.text());
+      process.exitCode = 1;
     }
   } catch (error) {
     console.error('❌ Network error:', error);
+    process.exitCode = 1;
   }
 }
 
