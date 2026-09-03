@@ -1,0 +1,24 @@
+{
+  "name": "playwright-hybrid-testing-framework",
+  "version": "1.0.0",
+  "description": "Production-grade E2E &amp; REST API test automation framework using Playwright &amp; TypeScript. Featuring API authentication bypass (storageState), Page Object Model (POM), and dynamic test data generation with Faker.",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:serve": "allure serve allure-results",
+    "slack:notify": "node --env-file=.env scripts/slack-notifier.js",
+    "test:full": "npm run test || true && npm run allure:generate && npm run slack:notify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.4.1",
+    "allure-commandline": "^2.43.0",
+    "allure-playwright": "^3.12.0",
+    "dotenv": "^17.4.2",
+    "typescript": "^7.0.2"
+  }
+}

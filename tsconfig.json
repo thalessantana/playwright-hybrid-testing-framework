@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["pages/*"],
+      "@api/*": ["api/*"],
+      "@fixtures/*": ["fixtures/*"]
+    },
+    "ignoreDeprecations": "6.0",
+    "strict": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    "pages/**/*",
+    "api/**/*",
+    "fixtures/**/*",
+    "tests/**/*",
+    "scripts/**/*",
+    "playwright.config.ts"
+  ],
+  "exclude": ["node_modules"]
+}
