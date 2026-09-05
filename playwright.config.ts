@@ -12,6 +12,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
+  timeout: 15_000,
   reporter: [
     ['list'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
@@ -26,12 +27,16 @@ export default defineConfig({
   ],
   use: {
     baseURL: process.env.UI_BASE_URL,
-    trace: 'retain-on-failure',
+    trace: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    actionTimeout: 10_000,
-    navigationTimeout: 15_000,
+    actionTimeout: 5_000,
+    navigationTimeout: 10_000,
   },
+  expect: {
+    timeout: 5_000,
+  },
+
   projects: [
     {
       name: 'setup',
