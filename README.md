@@ -12,12 +12,12 @@ A production-ready hybrid automated testing framework built with **Playwright** 
 
 ## 🚀 Key Highlights
 
-* **Hybrid Testing Strategy:** Unified execution of HTTP REST API validations and browser-based end-to-end UI journeys.
-* **Authentication Session Reuse (`storageState`):** Performs single authentication during test setup and persists session state to eliminate redundant login operations across test workers.
-* **Strict Page Object Model (POM):** Enforces a clean separation between interaction locators and test assertions for maintainability.
-* **Enterprise Reporting Dashboard:** Generates clean **Allure Reports** deployed automatically to **GitHub Pages**.
-* **Automated Alerting:** Dispatches rich execution summaries with metrics (Passed/Failed/Skipped) and dynamic dashboard links via **Slack Block Kit**.
-* **Automated AI Code Review:** Integrated with **CodeRabbit AI** using custom SDET rules to enforce testing anti-pattern prevention on Pull Requests.
+- **Hybrid Testing Strategy:** Unified execution of HTTP REST API validations and browser-based end-to-end UI journeys.
+- **Authentication Session Reuse (`storageState`):** Performs single authentication during test setup and persists session state to eliminate redundant login operations across test workers.
+- **Strict Page Object Model (POM):** Enforces a clean separation between interaction locators and test assertions for maintainability.
+- **Enterprise Reporting Dashboard:** Generates clean **Allure Reports** deployed automatically to **GitHub Pages**.
+- **Automated Alerting:** Dispatches rich execution summaries with metrics (Passed/Failed/Skipped) and dynamic dashboard links via **Slack Block Kit**.
+- **Automated AI Code Review:** Integrated with **CodeRabbit AI** using custom SDET rules to enforce testing anti-pattern prevention on Pull Requests.
 
 ---
 
@@ -44,3 +44,4 @@ A production-ready hybrid automated testing framework built with **Playwright** 
 ├── .coderabbit.yaml                # AI Code Review guidelines for QA patterns
 ├── playwright.config.ts            # Core Playwright configuration & project matrix
 └── tsconfig.json                   # Path mappings and TypeScript compiler rules
+```

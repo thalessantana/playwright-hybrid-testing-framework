@@ -1,26 +1,30 @@
-import fs from 'fs';
+import fs from "fs";
 
 const WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
-const REPORT_URL = process.env.ALLURE_REPORT_URL || 'https://github.com';
+const REPORT_URL = process.env.ALLURE_REPORT_URL || "https://github.com";
 
 if (!WEBHOOK_URL) {
-  console.error('❌ Error: SLACK_WEBHOOK_URL environment variable is not defined.');
+  console.error(
+    "❌ Error: SLACK_WEBHOOK_URL environment variable is not defined.",
+  );
   process.exit(1);
 }
 
-const summaryPath = './allure-report/widgets/summary.json';
+const summaryPath = "./allure-report/widgets/summary.json";
 if (!fs.existsSync(summaryPath)) {
-  console.error('❌ Error: allure-report/widgets/summary.json not found. Run "allure generate" first.');
+  console.error(
+    '❌ Error: allure-report/widgets/summary.json not found. Run "allure generate" first.',
+  );
   process.exit(1);
 }
 
-const summary = JSON.parse(fs.readFileSync(summaryPath, 'utf8'));
+const summary = JSON.parse(fs.readFileSync(summaryPath, "utf8"));
 const { passed, failed, broken, skipped, total } = summary.statistic;
 
 const hasFailed = failed > 0 || broken > 0;
-const statusText = hasFailed ? 'FAILED' : 'PASSED';
-const statusEmoji = hasFailed ? '🚨' : '✅';
-const cardColor = hasFailed ? '#E01E5A' : '#2EB886';
+const statusText = hasFailed ? "FAILED" : "PASSED";
+const statusEmoji = hasFailed ? "🚨" : "✅";
+const cardColor = hasFailed ? "#E01E5A" : "#2EB886";
 
 const payload = {
   attachments: [
@@ -28,30 +32,33 @@ const payload = {
       color: cardColor,
       blocks: [
         {
-          type: 'header',
+          type: "header",
           text: {
-            type: 'plain_text',
+            type: "plain_text",
             text: `${statusEmoji} E2E Test Execution: ${statusText}`,
             emoji: true,
           },
         },
         {
-          type: 'section',
+          type: "section",
           fields: [
-            { type: 'mrkdwn', text: `*Total Scenarios:* ${total}` },
-            { type: 'mrkdwn', text: `*Passed:* :white_check_mark: ${passed}` },
-            { type: 'mrkdwn', text: `*Failed:* :x: ${failed}` },
-            { type: 'mrkdwn', text: `*Skipped/Broken:* :warning: ${skipped + broken}` },
+            { type: "mrkdwn", text: `*Total Scenarios:* ${total}` },
+            { type: "mrkdwn", text: `*Passed:* :white_check_mark: ${passed}` },
+            { type: "mrkdwn", text: `*Failed:* :x: ${failed}` },
+            {
+              type: "mrkdwn",
+              text: `*Skipped/Broken:* :warning: ${skipped + broken}`,
+            },
           ],
         },
         {
-          type: 'actions',
+          type: "actions",
           elements: [
             {
-              type: 'button',
-              text: { type: 'plain_text', text: '📊 View Allure Report' },
+              type: "button",
+              text: { type: "plain_text", text: "📊 View Allure Report" },
               url: REPORT_URL,
-              style: hasFailed ? 'danger' : 'primary',
+              style: hasFailed ? "danger" : "primary",
             },
           ],
         },
@@ -63,19 +70,22 @@ const payload = {
 async function sendNotification() {
   try {
     const response = await fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
 
     if (response.ok) {
-      console.log('✅ Slack notification sent successfully!');
+      console.log("✅ Slack notification sent successfully!");
     } else {
-      console.error('❌ Failed to send Slack notification:', await response.text());
+      console.error(
+        "❌ Failed to send Slack notification:",
+        await response.text(),
+      );
       process.exitCode = 1;
     }
   } catch (error) {
-    console.error('❌ Network error:', error);
+    console.error("❌ Network error:", error);
     process.exitCode = 1;
   }
 }
