@@ -19,6 +19,15 @@ playwright/.cache/
 allure-results/
 allure-report/
 
+# Lint & Formatting Caches
+.eslintcache
+.prettiercache
+
+# TypeScript & Build Outputs
+dist/
+build/
+*.tsbuildinfo
+
 # OS & IDE Temporary Files
 .DS_Store
 Thumbs.db
