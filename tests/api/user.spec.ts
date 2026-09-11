@@ -5,6 +5,7 @@ import { UserApi } from "@api/clients/user.api";
 import {
   generateCreateUserPayload,
   generateUpdateUserPayload,
+  generateInvalidPassword,
 } from "@api/factories/user.factory";
 import {
   UserResponseSchema,
@@ -73,7 +74,7 @@ test.describe("REST API: User & Authentication Operations Suite", () => {
     const loginResponse = await authApi.login({
       user: {
         email: userPayload.user.email,
-        password: "wrong_invalid_password_123",
+        password: generateInvalidPassword(),
       },
     });
 

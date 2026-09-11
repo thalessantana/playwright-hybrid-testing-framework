@@ -8,6 +8,11 @@ import type {
 
 // 1 - Create ------------------------------------------------------------------------------
 
+/**
+ * Generates raw user data for the create-user endpoint.
+ * @param overrides - Optional partial fields to override the generated defaults.
+ * @returns A complete {@link CreateUserPayload} with random but valid values.
+ */
 export function generateCreateUserData(
   overrides?: Partial<CreateUserPayload>,
 ): CreateUserPayload {
@@ -21,6 +26,11 @@ export function generateCreateUserData(
   };
 }
 
+/**
+ * Wraps {@link generateCreateUserData} in the `{ user: ... }` envelope expected by the API.
+ * @param overrides - Optional partial fields forwarded to {@link generateCreateUserData}.
+ * @returns A ready-to-send {@link CreateUserRequest} payload.
+ */
 export function generateCreateUserPayload(
   overrides?: Partial<CreateUserPayload>,
 ): CreateUserRequest {
@@ -31,6 +41,11 @@ export function generateCreateUserPayload(
 
 // 2 - Update ------------------------------------------------------------------------------
 
+/**
+ * Generates raw user data for the update-user endpoint, including bio and avatar.
+ * @param overrides - Optional partial fields to override the generated defaults.
+ * @returns A complete {@link UpdateUserPayload} with random but valid values.
+ */
 export function generateUpdateUserData(
   overrides?: Partial<UpdateUserPayload>,
 ): UpdateUserPayload {
@@ -42,6 +57,11 @@ export function generateUpdateUserData(
   };
 }
 
+/**
+ * Wraps {@link generateUpdateUserData} in the `{ user: ... }` envelope expected by the API.
+ * @param overrides - Optional partial fields forwarded to {@link generateUpdateUserData}.
+ * @returns A ready-to-send {@link UpdateUserRequest} payload.
+ */
 export function generateUpdateUserPayload(
   overrides?: Partial<UpdateUserPayload>,
 ): UpdateUserRequest {
@@ -49,3 +69,13 @@ export function generateUpdateUserPayload(
     user: generateUpdateUserData(overrides),
   };
 }
+
+// 3 - Negative Testing Helpers -------------------------------------------------------------
+
+/**
+ * Generates a unique invalid password for negative login tests.
+ * Avoids hardcoded credential strings that trigger security scanners.
+ * @returns A deterministically invalid password string.
+ */
+export const generateInvalidPassword = (): string =>
+  `invalid_${Date.now()}_pwd`;
