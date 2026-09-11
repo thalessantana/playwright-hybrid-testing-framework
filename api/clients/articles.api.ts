@@ -109,4 +109,3 @@ export class ArticlesApi extends BaseApi {
     return this.delete(`${this.endpoint}/${slug}/favorite`);
   }
 }
-

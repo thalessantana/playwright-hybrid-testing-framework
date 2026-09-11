@@ -34,4 +34,3 @@ export class AuthApi extends BaseApi {
     return this.post("/api/users/login", payload);
   }
 }
-
