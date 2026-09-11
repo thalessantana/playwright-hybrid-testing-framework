@@ -85,4 +85,3 @@ export function generateUpdateArticlePayload(
     article: generateUpdateArticleData(overrides),
   };
 }
-

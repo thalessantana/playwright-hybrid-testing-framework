@@ -61,4 +61,3 @@ export class UserApi extends BaseApi {
     return this.delete(`${this.profilesEndpoint}/${username}/follow`);
   }
 }
-
