@@ -4,7 +4,7 @@ import path from "path";
 
 dotenv.config();
 
-export const STORAGE_STATE = path.join(__dirname, ".auth/user.json");
+export const STORAGE_STATE = path.join(__dirname, "playwright/.auth/user.json");
 
 export default defineConfig({
   testDir: "./tests",
@@ -40,7 +40,10 @@ export default defineConfig({
   projects: [
     {
       name: "setup",
-      testMatch: "**/*.setup.ts",
+      testMatch: "**/tests/setup/*.setup.ts",
+      use: {
+        baseURL: process.env.API_BASE_URL,
+      },
     },
     {
       name: "e2e-chromium",
@@ -50,13 +53,6 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
         storageState: STORAGE_STATE,
-      },
-    },
-    {
-      name: "e2e-unauthenticated",
-      testMatch: "**/tests/e2e/auth/**/*.spec.ts",
-      use: {
-        ...devices["Desktop Chrome"],
       },
     },
     {

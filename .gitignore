@@ -7,7 +7,7 @@ node_modules/
 !.env.example
 
 # Authentication & Local Storage
-.auth/
+playwright/.auth/
 
 # Playwright Test Artifacts
 test-results/
