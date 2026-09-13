@@ -19,7 +19,10 @@ setup("authenticate", async ({ request }) => {
 
   const body = await response.json();
   const token = body.user?.token;
-  expect(token, "JWT token should be present in register response").toBeTruthy();
+  expect(
+    token,
+    "JWT token should be present in register response",
+  ).toBeTruthy();
 
   const storageState = {
     cookies: [],
