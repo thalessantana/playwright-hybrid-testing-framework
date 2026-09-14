@@ -52,7 +52,7 @@ jobs:
         env:
           UI_BASE_URL: ${{ vars.UI_BASE_URL }}
           API_BASE_URL: ${{ vars.API_BASE_URL }}
-        run: npx playwright test --project=e2e-unauthenticated --project=api
+        run: npx playwright test --project=e2e-chromium --project=api
 
       - name: Generate Allure Report
         if: always()
