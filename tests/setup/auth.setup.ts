@@ -1,6 +1,6 @@
 import { test as setup, expect } from "@playwright/test";
 import { AuthApi } from "@api/clients/auth.api";
-import { generateCreateUserPayload } from "@api/factories/user.factory";
+import { generateCreateUserPayload } from "@factories/user.factory";
 import { STORAGE_STATE } from "../../playwright.config";
 import fs from "fs";
 import path from "path";
@@ -37,4 +37,8 @@ setup("authenticate", async ({ request }) => {
   const dir = path.dirname(STORAGE_STATE);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(STORAGE_STATE, JSON.stringify(storageState, null, 2));
+  fs.writeFileSync(
+    path.join(dir, "user-data.json"),
+    JSON.stringify(body.user, null, 2),
+  );
 });

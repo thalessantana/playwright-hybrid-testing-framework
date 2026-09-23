@@ -6,7 +6,7 @@ import {
   generateCreateUserPayload,
   generateUpdateUserPayload,
   generateInvalidPassword,
-} from "@api/factories/user.factory";
+} from "@factories/user.factory";
 import {
   UserResponseSchema,
   ProfileResponseSchema,
