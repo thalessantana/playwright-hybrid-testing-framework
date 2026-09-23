@@ -14,8 +14,9 @@ export const CreateArticleRequestSchema = z.object({
   article: CreateArticlePayloadSchema,
 });
 
-export const UpdateArticlePayloadSchema = CreateArticlePayloadSchema
-  .omit({ tagList: true })
+export const UpdateArticlePayloadSchema = CreateArticlePayloadSchema.omit({
+  tagList: true,
+})
   .partial()
   .strict();
 

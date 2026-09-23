@@ -14,19 +14,33 @@ export class NavbarComponent {
 
   constructor(page: Page) {
     this.page = page;
-    this.root = page.locator("nav.navbar");
+    this.root = page.getByRole("navigation");
 
-    this.brandLink = this.root.getByRole("link", { name: "conduit" });
-    this.homeLink = this.root.getByRole("link", { name: "Home" });
-    this.signInLink = this.root.getByRole("link", { name: "Sign in" });
-    this.signUpLink = this.root.getByRole("link", { name: "Sign up" });
+    this.brandLink = this.root.getByRole("link", { name: /conduit/i });
+    this.homeLink = this.root.getByRole("link", { name: /home/i });
+    this.signInLink = this.root.getByRole("link", { name: /sign in/i });
+    this.signUpLink = this.root.getByRole("link", { name: /sign up/i });
 
     this.newArticleLink = this.root.getByRole("link", { name: /new article/i });
     this.settingsLink = this.root.getByRole("link", { name: /settings/i });
+    this.currentUserProfileLink = this.root.locator("a.nav-link", {
+      has: this.page.locator(".user-pic"),
+    });
   }
-  
+
+  readonly currentUserProfileLink: Locator;
+
+  async getLoggedInUsername(): Promise<string> {
+    const text = await this.currentUserProfileLink.innerText();
+    return text.trim();
+  }
+
   getUserProfileLink(username: string): Locator {
     return this.root.getByRole("link", { name: username });
+  }
+
+  async clickBrand(): Promise<void> {
+    await this.brandLink.click();
   }
 
   async clickHome(): Promise<void> {

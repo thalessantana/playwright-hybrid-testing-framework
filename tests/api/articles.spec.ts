@@ -5,8 +5,8 @@ import { AuthApi } from "@api/clients/auth.api";
 import {
   generateCreateArticlePayload,
   generateUpdateArticlePayload,
-} from "@api/factories/article.factory";
-import { generateCreateUserPayload } from "@api/factories/user.factory";
+} from "@factories/article.factory";
+import { generateCreateUserPayload } from "@factories/user.factory";
 import {
   ArticleResponseSchema,
   ArticlesResponseSchema,

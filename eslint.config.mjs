@@ -29,6 +29,7 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
+      "no-empty-pattern": ["error", { allowObjectPatternsAsParameters: true }],
     },
   },
   {

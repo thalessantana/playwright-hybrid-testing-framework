@@ -56,6 +56,13 @@ export default defineConfig({
       },
     },
     {
+      name: "e2e-auth",
+      testMatch: "**/tests/e2e/auth/**/*.spec.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+    },
+    {
       name: "api",
       testMatch: "**/tests/api/**/*.spec.ts",
       use: {
