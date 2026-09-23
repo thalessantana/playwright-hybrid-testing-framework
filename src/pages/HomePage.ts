@@ -9,6 +9,7 @@ export class HomePage {
   readonly yourFeedTab: Locator;
   readonly globalFeedTab: Locator;
   readonly articleFeed: ArticleFeedComponent;
+  readonly popularTags: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +18,7 @@ export class HomePage {
 
     this.yourFeedTab = this.feedToggle.getByText("Your Feed");
     this.globalFeedTab = this.feedToggle.getByText("Global Feed");
+    this.popularTags = this.sidebar.locator(".tag-list a");
     this.articleFeed = new ArticleFeedComponent(page);
   }
 
@@ -43,9 +45,8 @@ export class HomePage {
   }
 
   async getPopularTags(): Promise<string[]> {
-    const tagLocators = this.sidebar.locator(".tag-list a");
-    await tagLocators.first().waitFor({ state: "visible" });
-    const tags = await tagLocators.allTextContents();
+    await this.popularTags.first().waitFor({ state: "visible" });
+    const tags = await this.popularTags.allTextContents();
     return tags.map((tag) => tag.trim());
   }
 }

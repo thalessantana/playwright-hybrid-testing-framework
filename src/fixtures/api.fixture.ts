@@ -22,35 +22,68 @@ export type ApiFixtures = {
   authenticatedUser: AuthenticatedUser;
 };
 
-function loadAuthenticatedUser(): AuthenticatedUser {
-  try {
-    const dir = path.dirname(STORAGE_STATE);
-    const userDataPath = path.join(dir, "user-data.json");
-    if (fs.existsSync(userDataPath)) {
-      const content = fs.readFileSync(userDataPath, "utf-8");
-      return JSON.parse(content);
-    }
+async function loadAuthenticatedUser(
+  apiContext: APIRequestContext,
+): Promise<AuthenticatedUser> {
+  const dir = path.dirname(STORAGE_STATE);
+  const userDataPath = path.join(dir, "user-data.json");
 
-    if (fs.existsSync(STORAGE_STATE)) {
+  if (fs.existsSync(userDataPath)) {
+    try {
+      const content = fs.readFileSync(userDataPath, "utf-8");
+      const user = JSON.parse(content);
+      if (user?.username && user?.token) {
+        return user;
+      }
+    } catch {
+      // If parsing fails, fall back to token recovery
+    }
+  }
+
+  if (fs.existsSync(STORAGE_STATE)) {
+    try {
       const content = fs.readFileSync(STORAGE_STATE, "utf-8");
       const state = JSON.parse(content);
       const origin = state.origins?.[0];
       const tokenItem = origin?.localStorage?.find(
         (item: { name: string; value: string }) => item.name === "jwtToken",
       );
-      if (tokenItem) {
-        return {
-          username: "",
-          email: "",
-          token: tokenItem.value,
-        };
+      if (tokenItem?.value) {
+        const userApi = new UserApi(apiContext, tokenItem.value);
+        const response = await userApi.getCurrentUser();
+        if (response.ok()) {
+          const data = await response.json();
+          const user: AuthenticatedUser = {
+            username: data.user.username,
+            email: data.user.email,
+            token: data.user.token ?? tokenItem.value,
+            bio: data.user.bio,
+            image: data.user.image,
+          };
+          try {
+            fs.writeFileSync(userDataPath, JSON.stringify(user, null, 2));
+          } catch {
+            // Ignore write errors
+          }
+          return user;
+        }
+        throw new Error(
+          `Failed to fetch user data with recovered token: HTTP ${response.status()}`,
+        );
+      }
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes("Failed to fetch user data")
+      ) {
+        throw error;
       }
     }
-  } catch {
-    // Fallback if file does not exist yet or cannot be read
   }
 
-  return { username: "", email: "", token: "" };
+  throw new Error(
+    "Failed to load authenticated user: neither user-data.json nor a valid storageState session was found. Ensure auth.setup has run.",
+  );
 }
 
 export const apiFixture = base.extend<ApiFixtures>({
@@ -67,8 +100,9 @@ export const apiFixture = base.extend<ApiFixtures>({
     await context.dispose();
   },
 
-  authenticatedUser: async ({}, use) => {
-    await use(loadAuthenticatedUser());
+  authenticatedUser: async ({ apiContext }, use) => {
+    const user = await loadAuthenticatedUser(apiContext);
+    await use(user);
   },
 
   authApi: async ({ apiContext }, use) => {

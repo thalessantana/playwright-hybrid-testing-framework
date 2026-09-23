@@ -66,13 +66,19 @@ export class ArticlePage {
     return (await this.authorName.textContent())?.trim() ?? "";
   }
 
+  getTag(tagName: string): Locator {
+    return this.tagList.getByText(tagName, { exact: true });
+  }
+
   async getTags(): Promise<string[]> {
     const tags = await this.tagList.locator("li").allTextContents();
     return tags.map((tag) => tag.trim());
   }
 
   getCommentCard(commentText: string): Locator {
-    return this.page.locator(".card", { hasText: commentText });
+    return this.page.locator(".card", {
+      has: this.page.getByText(commentText, { exact: true }),
+    });
   }
 
   async deleteComment(commentText: string): Promise<void> {

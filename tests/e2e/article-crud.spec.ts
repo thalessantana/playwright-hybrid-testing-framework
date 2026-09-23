@@ -1,10 +1,17 @@
-import { test, expect } from "@fixtures/index";
+import { test as base, expect } from "@fixtures/index";
 import {
   generateCreateArticleData,
   generateUpdateArticleData,
 } from "@factories/article.factory";
 import { generateCreateUserPayload } from "@factories/user.factory";
 import { ArticlesApi } from "@api/clients/articles.api";
+import { faker } from "@faker-js/faker";
+
+const test = base.extend<{ commentText: string }>({
+  commentText: async ({}, use) => {
+    await use(`${faker.lorem.sentence()} ${faker.string.alphanumeric(6)}`);
+  },
+});
 
 test.describe("Article CRUD (UI)", () => {
   test("should create a new article and verify on article page", async ({
@@ -18,9 +25,10 @@ test.describe("Article CRUD (UI)", () => {
 
     await expect(articlePage.articleTitle).toHaveText(articleData.title);
 
-    const tags = await articlePage.getTags();
     for (const tag of articleData.tagList ?? []) {
-      expect(tags).toContain(tag);
+      await expect(
+        articlePage.tagList.getByText(tag, { exact: true }),
+      ).toBeVisible();
     }
   });
 
@@ -49,19 +57,23 @@ test.describe("Article CRUD (UI)", () => {
       await expect(articlePage.articleTitle).toHaveText(updateData.title!);
     });
 
-    test("should post a comment on an article", async ({ articlePage }) => {
+    test("should post a comment on an article", async ({
+      articlePage,
+      commentText,
+    }) => {
       await articlePage.goto(articleSlug);
 
-      const commentText = "Playwright test comment - " + Date.now();
       await articlePage.postComment(commentText);
 
       await expect(articlePage.getCommentCard(commentText)).toBeVisible();
     });
 
-    test("should delete a comment from an article", async ({ articlePage }) => {
+    test("should delete a comment from an article", async ({
+      articlePage,
+      commentText,
+    }) => {
       await articlePage.goto(articleSlug);
 
-      const commentText = "Comment to delete - " + Date.now();
       await articlePage.postComment(commentText);
       await expect(articlePage.getCommentCard(commentText)).toBeVisible();
 

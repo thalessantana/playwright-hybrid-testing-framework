@@ -1,27 +1,16 @@
 import { test, expect } from "@fixtures/index";
 import { faker } from "@faker-js/faker";
-import { AuthApi } from "@api/clients/auth.api";
 import { generateCreateUserPayload } from "@factories/user.factory";
 
-test.describe.serial("Profile Settings Page", () => {
-  let userToken: string;
-
-  test.beforeAll(async ({ playwright }) => {
-    const request = await playwright.request.newContext({
-      baseURL: process.env.API_BASE_URL,
-    });
-    const authApi = new AuthApi(request);
+test.describe("Profile Settings Page", () => {
+  test.beforeEach(async ({ page, authApi }) => {
     const userPayload = generateCreateUserPayload();
     const res = await authApi.register(userPayload);
     const data = await res.json();
-    userToken = data.user.token;
-    await request.dispose();
-  });
 
-  test.beforeEach(async ({ page }) => {
     await page.addInitScript((token) => {
       window.localStorage.setItem("jwtToken", token);
-    }, userToken);
+    }, data.user.token);
   });
 
   test("should display settings form with all input fields", async ({

@@ -1,7 +1,12 @@
 import { test, expect } from "@fixtures/index";
+import { generateCreateArticleData } from "@factories/article.factory";
 
 test.describe("Home Page", () => {
-  test.beforeEach(async ({ homePage }) => {
+  test.beforeEach(async ({ homePage, articlesApi }) => {
+    const articleData = generateCreateArticleData();
+    const createRes = await articlesApi.createArticle({ article: articleData });
+    expect(createRes.status()).toBe(201);
+
     await homePage.goto();
   });
 
@@ -15,21 +20,17 @@ test.describe("Home Page", () => {
   test("should display articles in global feed", async ({ homePage }) => {
     await homePage.clickGlobalFeed();
 
-    const articleCount = await homePage.articleFeed.getArticleCount();
-    expect(articleCount).toBeGreaterThan(0);
+    await expect(homePage.articleFeed.getAllPreviews().first()).toBeVisible();
   });
 
   test("should display popular tags in sidebar", async ({ homePage }) => {
-    const tags = await homePage.getPopularTags();
-    expect(tags.length).toBeGreaterThan(0);
+    await expect(homePage.popularTags.first()).toBeVisible();
   });
 
   test("should filter articles by clicking a popular tag", async ({
     homePage,
   }) => {
     const tags = await homePage.getPopularTags();
-    expect(tags.length).toBeGreaterThan(0);
-
     await homePage.clickPopularTag(tags[0]);
 
     await expect(homePage.feedToggle).toContainText(tags[0]);

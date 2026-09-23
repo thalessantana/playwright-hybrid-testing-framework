@@ -30,9 +30,8 @@ test.describe("Full E2E Journey", () => {
     await expect(articlePage.articleTitle).toHaveText(articleData.title);
     await expect(articlePage.authorName).toHaveText(username);
 
-    const tags = await articlePage.getTags();
     for (const tag of articleData.tagList ?? []) {
-      expect(tags).toContain(tag);
+      await expect(articlePage.getTag(tag)).toBeVisible();
     }
 
     const commentText = "E2E journey comment - " + Date.now();
